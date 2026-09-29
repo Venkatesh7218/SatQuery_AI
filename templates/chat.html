@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SatQuery-AI | Chat Dashboard</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- KaTeX CSS for Math/Formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <!-- Flask Static Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+</head>
+<body>
+
+  <!-- Immersive Space Canvas & Cyberpunk Cosmic Background -->
+  <div class="space-bg" id="spaceBg">
+    <!-- Starfield Layers (Twinkling + Shooting Stars) -->
+    <div class="stars-layer stars-1"></div>
+    <div class="stars-layer stars-2"></div>
+    <div class="stars-layer stars-3"></div>
+    <div class="shooting-star star-1"></div>
+    <div class="shooting-star star-2"></div>
+    <div class="shooting-star star-3"></div>
+
+    <!-- Glowing Deep Space Nebulae -->
+    <div class="nebula nebula-cyan"></div>
+    <div class="nebula nebula-purple"></div>
+    <div class="nebula nebula-indigo"></div>
+
+    <!-- Orbital Trajectory Rings / Grid -->
+    <div class="orbital-ring ring-1"></div>
+    <div class="orbital-ring ring-2"></div>
+
+    <!-- Cosmic Planet with Atmospheric Rim Glow & Rings -->
+    <div class="cosmic-planet">
+      <div class="planet-glow"></div>
+      <div class="planet-body">
+        <div class="planet-atmosphere"></div>
+        <div class="planet-craters"></div>
+      </div>
+      <div class="planet-ring"></div>
+    </div>
+
+    <!-- Orbiting Satellite with Solar Arrays & Telemetry Beacon -->
+    <div class="floating-satellite">
+      <svg class="satellite-svg" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Solar Panel Left -->
+        <g class="sat-solar-left">
+          <rect x="5" y="42" width="45" height="36" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2" />
+          <line x1="20" y1="42" x2="20" y2="78" stroke="#38bdf8" stroke-width="0.8" opacity="0.6" />
+          <line x1="35" y1="42" x2="35" y2="78" stroke="#38bdf8" stroke-width="0.8" opacity="0.6" />
+          <line x1="5" y1="54" x2="50" y2="54" stroke="#38bdf8" stroke-width="0.8" opacity="0.6" />
+          <line x1="5" y1="66" x2="50" y2="66" stroke="#38bdf8" stroke-width="0.8" opacity="0.6" />
+          <rect x="50" y="58" width="12" height="4" fill="#64748b" />
+        </g>
+        
+        <!-- Central Bus / Satellite Body -->
+        <rect x="62" y="38" width="36" height="44" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8" />
+        <!-- Gold MLI Foil Insulator -->
+        <rect x="66" y="42" width="28" height="36" rx="2" fill="url(#goldFoil)" opacity="0.9" />
+        
+        <!-- Dish Antenna -->
+        <path d="M80 82 L80 96 M68 104 C68 94 92 94 92 104" stroke="#38bdf8" stroke-width="1.8" fill="none" />
+        <circle cx="80" cy="98" r="2.5" fill="#38bdf8" />
+        
+        <!-- Optical Sensor / SAR Aperture -->
+        <circle cx="80" cy="56" r="6" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5" />
+        <circle cx="80" cy="56" r="2.5" fill="#38bdf8" />
+        
+        <!-- Solar Panel Right -->
+        <g class="sat-solar-right">
+          <rect x="98" y="58" width="12" height="4" fill="#64748b" />
+          <rect x="110" y="42" width="45" height="36" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2" />
+          <line x1="125" y1="42" x2="125" y2="78" stroke="#38bdf8" stroke-width="0.8" opacity="0.6" />
+          <line x1="140" y1="42" x2="140" y2="78" stroke="#38bdf8" stroke-width="0.8" opacity="0.6" />
+          <line x1="110" y1="54" x2="155" y2="54" stroke="#38bdf8" stroke-width="0.8" opacity="0.6" />
+          <line x1="110" y1="66" x2="155" y2="66" stroke="#38bdf8" stroke-width="0.8" opacity="0.6" />
+        </g>
+        
+        <!-- Telemetry Beacon (Blinking Green/Cyan Pulse) -->
+        <circle cx="80" cy="36" r="3" fill="#10b981" class="beacon-pulse" />
+        
+        <defs>
+          <linearGradient id="goldFoil" x1="66" y1="42" x2="94" y2="78" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#fbbf24" />
+            <stop offset="0.5" stop-color="#d97706" />
+            <stop offset="1" stop-color="#b45309" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="satellite-hud-tag">
+        <span class="hud-ping"></span>
+        <span class="hud-text">ORBIT: 786 KM LEO • SAT-01</span>
+      </div>
+    </div>
+
+    <!-- Earth Horizon Curve at Bottom -->
+    <div class="earth-horizon">
+      <div class="earth-atmosphere-glow"></div>
+    </div>
+  </div>
+
+  <div class="dashboard-layout">
+    
+    <!-- ==========================================
+         LEFT SIDEBAR
+         ========================================== -->
+    <aside class="sidebar" id="sidebar">
+      <!-- Sidebar Header / Brand Logo -->
+      <div class="sidebar-header">
+        <div class="brand-info">
+          <div class="planet-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="7" fill="url(#planet-grad)" />
+              <ellipse cx="12" cy="12" rx="11" ry="4" transform="rotate(-30 12 12)" stroke="url(#ring-grad)" stroke-width="1.8" />
+              <defs>
+                <linearGradient id="planet-grad" x1="5" y1="5" x2="19" y2="19">
+                  <stop stop-color="#38bdf8" />
+                  <stop offset="1" stop-color="#818cf8" />
+                </linearGradient>
+                <linearGradient id="ring-grad" x1="0" y1="0" x2="24" y2="24">
+                  <stop stop-color="#e0e7ff" />
+                  <stop offset="1" stop-color="#c084fc" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div>
+            <h3>SatQuery-AI</h3>
+            <span class="brand-tag">AI Satellite Intelligence</span>
+          </div>
+        </div>
+        <button class="mobile-close-btn" id="closeSidebarBtn" aria-label="Close sidebar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- New Chat Button -->
+      <button class="btn-new-chat" id="newChatBtn">
+        <i class="fa-solid fa-plus"></i>
+        <span>New Chat</span>
+      </button>
+
+      <!-- Search & Recent Chats Header -->
+      <div class="recent-header">
+        <div class="recent-title">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Recent Chats</span>
+        </div>
+        <button class="icon-search-btn" id="searchChatBtn" title="Search history">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+
+      <!-- Search Input (Toggleable) -->
+      <div class="search-box-container" id="searchBoxContainer" style="display: none;">
+        <input type="text" id="searchHistoryInput" placeholder="Search conversations..." />
+      </div>
+
+      <!-- Scrollable Recent Chat List (Dynamically populated from SQLite) -->
+      <div class="chat-history-list" id="chatHistoryList">
+        <div class="empty-history" id="emptyHistory">
+          <i class="fa-regular fa-comments"></i>
+          <p>No conversations yet.<br>Start a new satellite query!</p>
+        </div>
+      </div>
+
+      <!-- Sidebar Bottom Navigation -->
+      <div class="sidebar-footer">
+        <a href="#" class="nav-item active" id="navHome"><i class="fa-solid fa-house"></i><span>Home</span></a>
+        <a href="#" class="nav-item" id="navModels"><i class="fa-solid fa-brain"></i><span>Models</span></a>
+        <a href="#" class="nav-item" id="navDatasets"><i class="fa-solid fa-database"></i><span>Datasets</span></a>
+        <a href="#" class="nav-item" id="navResearch"><i class="fa-solid fa-book-bookmark"></i><span>Research</span></a>
+      </div>
+    </aside>
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- ==========================================
+         MAIN CHAT & DASHBOARD AREA
+         ========================================== -->
+    <main class="main-content">
+      
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle-btn" id="openSidebarBtn" aria-label="Open sidebar">
+            <i class="fa-solid fa-bars-staggered"></i>
+          </button>
+          <div class="system-status-pill">
+            <span class="pulse-dot"></span>
+            <span class="status-text">Satellite Link: <strong>Online</strong></span>
+          </div>
+        </div>
+
+        <!-- Top Right: Logged-in User Profile -->
+        <div class="topbar-right">
+          <div class="user-profile-menu" id="userMenuBtn">
+            <div class="user-avatar">
+              <!-- Dynamic Avatar Initials -->
+              <span class="avatar-initials">
+                {% if fullname %}
+                  {{ (fullname.split()[0][0] + (fullname.split()[1][0] if fullname.split()|length > 1 else ''))|upper }}
+                {% else %}
+                  {{ (username[:2] if username else 'EX')|upper }}
+                {% endif %}
+              </span>
+              <span class="user-status-badge"></span>
+            </div>
+            <div class="user-info">
+              <span class="user-name">{{ fullname if fullname else username }}</span>
+              <span class="user-role">@{{ username }}</span>
+            </div>
+            <i class="fa-solid fa-chevron-down chevron-icon"></i>
+
+            <!-- Dropdown Menu -->
+            <div class="user-dropdown" id="userDropdown">
+              <div class="dropdown-header">
+                <p class="dropdown-greeting">Signed in as</p>
+                <p class="dropdown-user">{{ fullname if fullname else username }}</p>
+                <p style="font-size: 0.72rem; color: #94a3b8; margin-top: 2px;">{{ email if email else (username + '@satquery.ai') }}</p>
+              </div>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item"><i class="fa-regular fa-user"></i> Profile</a>
+              <a href="#" class="dropdown-item"><i class="fa-solid fa-sliders"></i> Preferences</a>
+              <div class="dropdown-divider"></div>
+              <a href="{{ url_for('logout') }}" class="dropdown-item text-danger">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Scrollable Message Body -->
+      <div class="chat-viewport" id="chatViewport">
+        
+        <!-- 1. HERO GREETING (Shown on New Chat / Initial Landing) -->
+        <section class="welcome-hero" id="welcomeHero">
+          <div class="hero-header">
+            <span class="hero-badge">🛰️ AI Earth Observation Engine</span>
+            <h1 class="hero-greeting">
+              Hello, <span class="gradient-text">{{ (fullname.split()[0] if fullname else username)|capitalize }}!</span> <span class="wave-anim">👋</span>
+            </h1>
+            <h2 class="hero-prompt-title">What would you like to discover today?</h2>
+            <p class="hero-prompt-sub">Ask anything about satellite photos in plain, simple language. Get clear answers with visual proof!</p>
+          </div>
+
+          <!-- 4 Interactive AI Action Cards -->
+          <div class="action-cards-grid">
+            <div class="action-card" data-prompt="Tell me what you see in this satellite image in simple, plain words. What are the key areas?">
+              <div class="card-icon cyan-glow"><i class="fa-solid fa-camera-retro"></i></div>
+              <div class="card-text">
+                <h4>What's in this Photo?</h4>
+                <p>Simple, clear breakdown of trees, water, houses, and roads.</p>
+              </div>
+              <i class="fa-solid fa-arrow-right card-arrow"></i>
+            </div>
+
+            <div class="action-card" data-prompt="Compare these two satellite photos and explain what changed over time in simple terms.">
+              <div class="card-icon blue-glow"><i class="fa-solid fa-arrows-spin"></i></div>
+              <div class="card-text">
+                <h4>What Changed Over Time?</h4>
+                <p>Compare two photos (Before vs After) to see new construction or tree loss.</p>
+              </div>
+              <i class="fa-solid fa-arrow-right card-arrow"></i>
+            </div>
+
+            <div class="action-card" data-prompt="Find and highlight buildings, roads, farms, and water in this satellite image.">
+              <div class="card-icon red-glow"><i class="fa-solid fa-crosshairs"></i></div>
+              <div class="card-text">
+                <h4>Find Key Places</h4>
+                <p>Point out exact buildings, farms, water bodies, and routes.</p>
+              </div>
+              <i class="fa-solid fa-arrow-right card-arrow"></i>
+            </div>
+
+            <div class="action-card" data-prompt="Combine optical photo and SAR radar to see through clouds and explain the ground simply.">
+              <div class="card-icon purple-glow"><i class="fa-solid fa-satellite-dish"></i></div>
+              <div class="card-text">
+                <h4>See Through Clouds (Radar)</h4>
+                <p>Combine normal photos with satellite radar to see ground under clouds.</p>
+              </div>
+              <i class="fa-solid fa-arrow-right card-arrow"></i>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. ACTIVE CONVERSATION CONTAINER (Initially Hidden or with messages) -->
+        <section class="messages-container" id="messagesContainer">
+          <!-- Messages will be dynamically rendered here by chat.js -->
+        </section>
+
+      </div>
+
+      <!-- ==========================================
+           BOTTOM CHAT INPUT BAR
+           ========================================== -->
+      <footer class="chat-input-area">
+        <div class="chat-input-container">
+          
+          <!-- Dual-Image Attachment Preview Strip (Change Detection & Sensor Fusion) -->
+          <div class="attachments-strip" id="attachmentsStrip" style="display: none;">
+            <div class="attachment-slot" id="slotA" style="display: none;">
+              <div class="slot-badge">Image A (Before / Optical)</div>
+              <img src="" id="previewImgA" alt="Image A Preview" />
+              <button type="button" class="remove-slot-btn" id="removeSlotABtn" title="Remove Image A"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="attachment-slot" id="slotB" style="display: none;">
+              <div class="slot-badge">Image B (After / SAR)</div>
+              <img src="" id="previewImgB" alt="Image B Preview" />
+              <button type="button" class="remove-slot-btn" id="removeSlotBBtn" title="Remove Image B"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="attachment-mode-tag" id="attachmentModeTag">
+              <i class="fa-solid fa-layer-group"></i>
+              <span id="modeTagText">Single-Image Scan</span>
+            </div>
+          </div>
+
+          <form class="input-form" id="chatForm">
+            <!-- Multi-file upload for Dual-Image Analysis & GeoTIFF -->
+            <input type="file" id="fileInput" accept="image/*,.tif,.tiff" multiple style="display: none;" />
+
+            <!-- Left Attachment Action Buttons -->
+            <div class="input-actions-left">
+              <button type="button" class="btn-tool" id="btnUploadFile" title="Attach satellite image(s) (supports 1 or 2 images)">
+                <i class="fa-solid fa-paperclip"></i>
+              </button>
+              <button type="button" class="btn-tool" id="btnUploadImage" title="Upload satellite image(s) for Change Detection / Fusion">
+                <i class="fa-regular fa-image"></i>
+              </button>
+            </div>
+
+            <!-- Auto-expanding Textarea -->
+            <textarea 
+              id="chatInput" 
+              placeholder="Ask anything about satellite images, terrain, change detection..." 
+              rows="1"
+            ></textarea>
+
+            <!-- Right Action Buttons -->
+            <div class="input-actions-right">
+              <button type="button" class="btn-tool mic-btn" id="micBtn" title="Voice query">
+                <i class="fa-solid fa-microphone"></i>
+              </button>
+              <button type="submit" class="btn-send" id="sendBtn" title="Send message">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
+          </form>
+
+        </div>
+        <p class="input-disclaimer">SatQuery-AI may produce geospatial approximations. Always verify critical telemetry.</p>
+      </footer>
+
+  <!-- Models, Datasets & Research Showcase Modal (Slide 3 & Slide 6) -->
+  <div class="showcase-modal-backdrop" id="showcaseModal">
+    <div class="showcase-modal-container">
+      <header class="showcase-modal-header">
+        <div class="showcase-tabs">
+          <button type="button" class="showcase-tab active" data-tab="tabModels">
+            <i class="fa-solid fa-brain"></i> <span>AI Models & Architecture</span>
+          </button>
+          <button type="button" class="showcase-tab" data-tab="tabDatasets">
+            <i class="fa-solid fa-database"></i> <span>Public Datasets</span>
+          </button>
+          <button type="button" class="showcase-tab" data-tab="tabResearch">
+            <i class="fa-solid fa-book-bookmark"></i> <span>Research & Citations</span>
+          </button>
+        </div>
+        <button type="button" class="showcase-close-btn" id="showcaseCloseBtn" aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </header>
+
+      <div class="showcase-modal-body">
+        
+        <!-- TAB 1: AI MODELS & ARCHITECTURE -->
+        <div class="showcase-tab-pane active" id="tabModels">
+          <div class="pane-intro">
+            <h3>🛰️ AI Models & Controller Architecture</h3>
+            <p>SatQuery-AI integrates remote sensing vision-language models, high-speed LPU controllers, and computer vision engines to deliver end-to-end multi-modal Earth Observation intelligence.</p>
+          </div>
+
+          <div class="showcase-grid">
+            <!-- Model Card 1: GeoChat -->
+            <div class="showcase-card">
+              <div class="card-top-bar">
+                <div class="model-icon"><i class="fa-solid fa-comments"></i></div>
+                <div class="card-badge primary">Multimodal Remote VLM</div>
+              </div>
+              <div class="card-title-group">
+                <h4>GeoChat</h4>
+                <span class="sub-label">Grounded Large Remote Sensing VLM</span>
+              </div>
+              <p class="card-desc">First grounded vision-language model tailored specifically for Earth Observation. Capable of visual question answering, spatial object grounding, and conversational reasoning over high-resolution satellite imagery.</p>
+              <div class="spec-list">
+                <div class="spec-item"><strong>Tasks:</strong> Single-Image VQA, Grounding, Multi-turn Chat</div>
+                <div class="spec-item"><strong>Framework:</strong> PyTorch • Hugging Face Transformers</div>
+                <div class="spec-item"><strong>Training Source:</strong> RSVQA • VRSBench • LLaVA Architecture</div>
+              </div>
+              <div class="card-footer-links">
+                <a href="https://huggingface.co" target="_blank" rel="noopener" class="card-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Hugging Face Model</a>
+              </div>
+            </div>
+
+            <!-- Model Card 2: RemoteCLIP -->
+            <div class="showcase-card">
+              <div class="card-top-bar">
+                <div class="model-icon"><i class="fa-solid fa-crosshairs"></i></div>
+                <div class="card-badge secondary">Contrastive Foundation Model</div>
+              </div>
+              <div class="card-title-group">
+                <h4>RemoteCLIP</h4>
+                <span class="sub-label">Cross-Modal Vision-Language Foundation Model</span>
+              </div>
+              <p class="card-desc">State-of-the-art vision-language model aligned on 12-band multi-spectral satellite imagery. Powers zero-shot classification, cross-modal semantic retrieval, and multi-sensor spectral alignment.</p>
+              <div class="spec-list">
+                <div class="spec-item"><strong>Tasks:</strong> Zero-Shot Classification, Image-Text Alignment</div>
+                <div class="spec-item"><strong>Modalities:</strong> Sentinel-2 Optical • Aerial High-Res</div>
+                <div class="spec-item"><strong>Framework:</strong> Contrastive PyTorch Engine</div>
+              </div>
+              <div class="card-footer-links">
+                <a href="https://huggingface.co" target="_blank" rel="noopener" class="card-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Hugging Face Model</a>
+              </div>
+            </div>
+
+            <!-- Model Card 3: Groq LPU Controller -->
+            <div class="showcase-card">
+              <div class="card-top-bar">
+                <div class="model-icon"><i class="fa-solid fa-bolt"></i></div>
+                <div class="card-badge accent">High-Speed LPU Controller</div>
+              </div>
+              <div class="card-title-group">
+                <h4>Groq LPU Controller</h4>
+                <span class="sub-label">Real-Time Multi-Agent Routing Brain</span>
+              </div>
+              <p class="card-desc">Sub-100ms ultra-low latency inference engine orchestrating the agentic workflow: Classifier Agent, Task Execution Agents, and Geospatial Verification Agents with multi-model fallback.</p>
+              <div class="spec-list">
+                <div class="spec-item"><strong>Active Models:</strong> Qwen 2.5 • LLaMA 3.3 • OSS 120B</div>
+                <div class="spec-item"><strong>Role:</strong> Agentic Dispatch & Telemetry Verification</div>
+                <div class="spec-item"><strong>Speed:</strong> ~350 Tokens / Second Inference</div>
+              </div>
+              <div class="card-footer-links">
+                <a href="https://groq.com" target="_blank" rel="noopener" class="card-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Groq LPU Cloud</a>
+              </div>
+            </div>
+
+            <!-- Model Card 4: OpenCV Difference & Fusion Engine -->
+            <div class="showcase-card">
+              <div class="card-top-bar">
+                <div class="model-icon"><i class="fa-solid fa-eye"></i></div>
+                <div class="card-badge success">Computer Vision Engine</div>
+              </div>
+              <div class="card-title-group">
+                <h4>OpenCV Proof Generator</h4>
+                <span class="sub-label">Bi-Temporal Difference & SAR Fusion</span>
+              </div>
+              <p class="card-desc">High-precision deterministic computer vision engine generating pixel difference masks, Otsu structural change overlays, NDVI vegetation vigor heatmaps, and C-band radar texture fusion.</p>
+              <div class="spec-list">
+                <div class="spec-item"><strong>Algorithms:</strong> Morphological SSIM, Otsu Threshold, HSV Fusion</div>
+                <div class="spec-item"><strong>Output:</strong> 3-Panel Visual Evidence Proofs with Area % Delta</div>
+                <div class="spec-item"><strong>Libraries:</strong> OpenCV • NumPy • PIL • Rasterio</div>
+              </div>
+              <div class="card-footer-links">
+                <span class="status-tag active"><i class="fa-solid fa-circle-check"></i> Active in Pipeline</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: PUBLIC DATASETS -->
+        <div class="showcase-tab-pane" id="tabDatasets">
+          <div class="pane-intro">
+            <h3>🌍 Free Public Remote Sensing Datasets</h3>
+            <p>Our models and validation benchmarks leverage internationally established, open-access remote sensing datasets covering multi-spectral optical and Synthetic Aperture Radar (SAR) imagery.</p>
+          </div>
+
+          <div class="showcase-grid">
+            <!-- Dataset Card 1: BigEarthNet -->
+            <div class="showcase-card">
+              <div class="card-top-bar">
+                <div class="model-icon"><i class="fa-solid fa-earth-americas"></i></div>
+                <div class="card-badge primary">Optical + SAR Multimodal</div>
+              </div>
+              <div class="card-title-group">
+                <h4>BigEarthNet</h4>
+                <span class="sub-label">Sentinel-1 & Sentinel-2 Benchmark</span>
+              </div>
+              <p class="card-desc">Massive multi-modal benchmark dataset containing 590,326 pairs of Sentinel-1 dual-polarization SAR and Sentinel-2 12-band multi-spectral optical image tiles across 10 European nations.</p>
+              <div class="spec-list">
+                <div class="spec-item"><strong>Total Pairs:</strong> 590,326 Sentinel Image Tiles</div>
+                <div class="spec-item"><strong>Resolution:</strong> 10m, 20m, 60m GSD</div>
+                <div class="spec-item"><strong>Primary Tasks:</strong> Optical-SAR Multimodal Fusion, Land-Cover</div>
+              </div>
+              <div class="card-footer-links">
+                <a href="https://bigearth.net" target="_blank" rel="noopener" class="card-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> bigearth.net</a>
+              </div>
+            </div>
+
+            <!-- Dataset Card 2: RSVQA -->
+            <div class="showcase-card">
+              <div class="card-top-bar">
+                <div class="model-icon"><i class="fa-solid fa-circle-question"></i></div>
+                <div class="card-badge secondary">Visual Question Answering</div>
+              </div>
+              <div class="card-title-group">
+                <h4>RSVQA</h4>
+                <span class="sub-label">Remote Sensing Visual Question Answering</span>
+              </div>
+              <p class="card-desc">Pioneering benchmark for visual question answering over satellite imagery, featuring query-answer pairs evaluating object presence, counts, comparison, and spatial relationships.</p>
+              <div class="spec-list">
+                <div class="spec-item"><strong>Tiers:</strong> Low-Res (Sentinel-2, 10m) & High-Res (0.15m)</div>
+                <div class="spec-item"><strong>QA Pairs:</strong> 1,000,000+ Question-Answer Pairs</div>
+                <div class="spec-item"><strong>Tasks:</strong> Object Count, Area Comparison, Rural vs Urban</div>
+              </div>
+              <div class="card-footer-links">
+                <a href="https://rsvqa.sylvainlobry.com" target="_blank" rel="noopener" class="card-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> rsvqa.sylvainlobry.com</a>
+              </div>
+            </div>
+
+            <!-- Dataset Card 3: VRSBench -->
+            <div class="showcase-card">
+              <div class="card-top-bar">
+                <div class="model-icon"><i class="fa-solid fa-bullseye"></i></div>
+                <div class="card-badge accent">Visual Grounding Benchmark</div>
+              </div>
+              <div class="card-title-group">
+                <h4>VRSBench</h4>
+                <span class="sub-label">Visual Remote Sensing Grounding Benchmark</span>
+              </div>
+              <p class="card-desc">Comprehensive multi-task visual remote sensing dataset providing fine-grained text descriptions, visual grounding bounding boxes, and object-level localization for satellite queries.</p>
+              <div class="spec-list">
+                <div class="spec-item"><strong>Size:</strong> 29,614 High-Resolution Optical Images</div>
+                <div class="spec-item"><strong>Annotations:</strong> 120,000+ Grounding Bounding Boxes</div>
+                <div class="spec-item"><strong>Tasks:</strong> Dense Captioning, Visual Grounding</div>
+              </div>
+              <div class="card-footer-links">
+                <a href="https://github.com/lx709/VRSBench" target="_blank" rel="noopener" class="card-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> github.com/lx709/VRSBench</a>
+              </div>
+            </div>
+
+            <!-- Dataset Card 4: CDVQA -->
+            <div class="showcase-card">
+              <div class="card-top-bar">
+                <div class="model-icon"><i class="fa-solid fa-arrows-spin"></i></div>
+                <div class="card-badge success">Change Detection VQA</div>
+              </div>
+              <div class="card-title-group">
+                <h4>CDVQA</h4>
+                <span class="sub-label">Change Detection Visual Question Answering</span>
+              </div>
+              <p class="card-desc">Dedicated bi-temporal remote sensing dataset focused on questions regarding land-use changes, urban development, disaster damage, and temporal variations between satellite image pairs.</p>
+              <div class="spec-list">
+                <div class="spec-item"><strong>Format:</strong> Bi-Temporal Image Pairs (T1 vs T2)</div>
+                <div class="spec-item"><strong>Focus:</strong> Urban Sprawl, Deforestation, Flood Inundation</div>
+                <div class="spec-item"><strong>Tasks:</strong> Bi-Temporal Change Detection & QA</div>
+              </div>
+              <div class="card-footer-links">
+                <a href="https://github.com/YZHJessica/CDVQA" target="_blank" rel="noopener" class="card-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> github.com/YZHJessica/CDVQA</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: RESEARCH & CITATIONS -->
+        <div class="showcase-tab-pane" id="tabResearch">
+          <div class="pane-intro">
+            <h3>📚 Academic Research & SIH Problem Statement</h3>
+            <p>SatQuery-AI is architected around foundational academic research in agentic AI systems and remote sensing vision-language models.</p>
+          </div>
+
+          <div class="showcase-grid">
+            <div class="showcase-card full-width">
+              <div class="card-top-bar">
+                <div class="model-icon"><i class="fa-solid fa-satellite"></i></div>
+                <div class="card-badge primary">SIH 2026 Problem Statement</div>
+              </div>
+              <div class="card-title-group">
+                <h4>Problem Statement ID: 26167</h4>
+                <span class="sub-label">Vision-Language Assistant for Multimodal Remote Sensing Image Analysis • Theme: Space Technology • Team: SkyLineX</span>
+              </div>
+              <p class="card-desc">Transforming complex remote sensing image interpretation into natural language conversational queries without requiring manual GIS expert intervention.</p>
+              <div class="spec-list">
+                <div class="spec-item"><strong>Key Tasks:</strong> Single-Image VQA, Captioning/Grounding, Bi-Temporal Change Detection, Optical-SAR Multimodal Fusion.</div>
+                <div class="spec-item"><strong>Key Deliverable:</strong> Natural language output with highlighted visual proof evidence.</div>
+              </div>
+            </div>
+
+            <div class="showcase-card">
+              <div class="card-top-bar">
+                <div class="model-icon"><i class="fa-solid fa-book-open"></i></div>
+                <div class="card-badge secondary">Academic Citation</div>
+              </div>
+              <div class="card-title-group">
+                <h4>Agentic AI in Remote Sensing</h4>
+                <span class="sub-label">Foundations, Taxonomy, and Emerging Systems</span>
+              </div>
+              <p class="card-desc">Foundational survey on multi-agent LLM systems in Earth Observation, shaping our controller-based routing and task agent delegation architecture.</p>
+              <div class="spec-list">
+                <div class="spec-item"><strong>Reference:</strong> arXiv:2601.01891</div>
+                <div class="spec-item"><strong>Application:</strong> Controller-based routing brain for specialized task agents.</div>
+              </div>
+              <div class="card-footer-links">
+                <a href="https://arxiv.org/abs/2601.01891" target="_blank" rel="noopener" class="card-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> Read on arXiv</a>
+              </div>
+            </div>
+
+            <div class="showcase-card">
+              <div class="card-top-bar">
+                <div class="model-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div class="card-badge accent">Academic Citation</div>
+              </div>
+              <div class="card-title-group">
+                <h4>Agentic AI for Remote Sensing</h4>
+                <span class="sub-label">Technical Challenges and Research Directions</span>
+              </div>
+              <p class="card-desc">Explores vision-language model adaptation for conversational interaction over multi-spectral satellite imagery and multimodal cross-sensor alignment.</p>
+              <div class="spec-list">
+                <div class="spec-item"><strong>Publisher:</strong> ResearchGate Remote Sensing Publication</div>
+                <div class="spec-item"><strong>Application:</strong> Multimodal prompt formatting & VQA grounding.</div>
+              </div>
+              <div class="card-footer-links">
+                <a href="https://researchgate.net" target="_blank" rel="noopener" class="card-link"><i class="fa-solid fa-arrow-up-right-from-square"></i> ResearchGate Publication</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+  <!-- High-Resolution Image Lightbox Modal for AI Visual Proof -->
+  <div class="image-lightbox" id="imageLightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close-btn" id="lightboxCloseBtn"><i class="fa-solid fa-xmark"></i> Close</button>
+      <img src="" id="lightboxImg" alt="High Resolution Proof Inspection" />
+    </div>
+  </div>
+
+  <!-- Markdown Parser for AI Chat Responses -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- KaTeX for Scientific / NDVI Math Formulas -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <!-- Flask Static JavaScript -->
+  <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>

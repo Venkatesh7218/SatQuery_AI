@@ -1,0 +1,663 @@
+/* ==========================================================================
+   CSS Variables & Design Tokens
+   ========================================================================== */
+:root {
+  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Color Palette */
+  --bg-dark: #050814;
+  --card-bg: rgba(11, 17, 34, 0.78);
+  --card-border: rgba(255, 255, 255, 0.08);
+  
+  --primary-blue: #38bdf8;
+  --primary-indigo: #6366f1;
+  --primary-purple: #a855f7;
+  --primary-pink: #ec4899;
+  
+  --text-white: #ffffff;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  
+  --input-bg: rgba(15, 23, 42, 0.75);
+  --input-border: rgba(255, 255, 255, 0.12);
+  --input-focus: #38bdf8;
+  
+  /* Gradients */
+  --btn-gradient: linear-gradient(135deg, #3b82f6 0%, #7c3aed 55%, #a855f7 100%);
+  --brand-gradient: linear-gradient(135deg, #60a5fa 0%, #c084fc 60%, #f472b6 100%);
+  --glow-cyan: rgba(56, 189, 248, 0.35);
+}
+
+/* ==========================================================================
+   Base & Reset
+   ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-dark);
+  color: var(--text-white);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Space Background & Nebulae
+   ========================================================================== */
+.space-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 10%, #0d1631 0%, #050814 100%);
+  overflow: hidden;
+}
+
+/* Starfield pattern */
+.space-bg .stars {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 100px 150px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 240px 80px, #93c5fd, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 350px 220px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 500px 120px, #e0e7ff, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 680px 280px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 800px 90px, #38bdf8, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 950px 340px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 1100px 160px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 1250px 420px, #ffffff, rgba(0,0,0,0));
+  background-size: 550px 550px;
+  opacity: 0.7;
+}
+
+/* Atmospheric Glows */
+.nebula-blue {
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(60px);
+}
+
+.nebula-purple {
+  position: absolute;
+  top: 35%;
+  right: 15%;
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.14) 0%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(80px);
+}
+
+/* Earth Curve with city lights glow */
+.earth-horizon {
+  position: absolute;
+  bottom: -280px;
+  left: -20%;
+  width: 140%;
+  height: 550px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 0%, #1e3a8a 0%, #0c1838 35%, #050814 80%);
+  border-top: 2px solid rgba(56, 189, 248, 0.5);
+  box-shadow: 
+    0 -15px 40px rgba(56, 189, 248, 0.25),
+    inset 0 10px 40px rgba(245, 158, 11, 0.2),
+    inset 0 25px 60px rgba(56, 189, 248, 0.15);
+}
+
+/* ==========================================================================
+   Main Layout Container
+   ========================================================================== */
+.login-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1160px;
+  min-height: 85vh;
+  margin: auto;
+  padding: 40px 30px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.95fr;
+  gap: 40px;
+  align-items: center;
+}
+
+/* ==========================================================================
+   Left Column: Brand & Hero
+   ========================================================================== */
+.brand-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 10px 20px 20px 0;
+}
+
+.brand-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.planet-icon {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+}
+
+.planet-icon svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6));
+}
+
+.brand-text h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text-white);
+}
+
+.brand-text p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.brand-content {
+  margin: auto 0;
+  padding-top: 30px;
+}
+
+/* Satellite Floating Animation */
+.satellite-illustration {
+  position: relative;
+  width: 220px;
+  height: 170px;
+  margin-bottom: 25px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.glow-orb {
+  position: absolute;
+  top: 30%;
+  left: 30%;
+  width: 90px;
+  height: 90px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, transparent 70%);
+  filter: blur(25px);
+}
+
+.satellite-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.7));
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+.hero-title {
+  font-size: 3.2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #f1f5f9;
+  line-height: 1.4;
+  margin-bottom: 28px;
+  max-width: 440px;
+}
+
+.feature-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 18px;
+  border-radius: 9999px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #cbd5e1;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.pill-icon {
+  font-size: 1rem;
+}
+
+/* ==========================================================================
+   Right Column: Login Card & Glassmorphism
+   ========================================================================== */
+.form-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  background: var(--card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 28px;
+  padding: 42px 36px;
+  border: 1px solid var(--card-border);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Glowing Neon Cyan Accent on the Left Border */
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: -2px;
+  width: 3px;
+  height: 70%;
+  background: linear-gradient(180deg, transparent, #38bdf8 30%, #818cf8 70%, transparent);
+  border-radius: 99px;
+  box-shadow: 0 0 16px 2px rgba(56, 189, 248, 0.6);
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.card-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-white);
+  letter-spacing: -0.4px;
+}
+
+.wave-emoji {
+  display: inline-block;
+  transform-origin: 70% 70%;
+}
+
+.card-header p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.auth-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 0.84rem;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.auth-alert.error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+.auth-alert.error i {
+  color: #ef4444;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.auth-alert.success {
+  background: rgba(52, 211, 153, 0.15);
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  color: #6ee7b7;
+}
+
+.auth-alert.success i {
+  color: #34d399;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Form Fields
+   ========================================================================== */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.input-group label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #cbd5e1;
+}
+
+.input-field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-field-wrapper input {
+  width: 100%;
+  height: 48px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  padding: 0 42px 0 16px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--text-white);
+  transition: all 0.25s ease;
+}
+
+.input-field-wrapper input::placeholder {
+  color: var(--text-dim);
+  font-size: 0.86rem;
+}
+
+.input-field-wrapper input:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+}
+
+.field-icon {
+  position: absolute;
+  right: 15px;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+
+.field-icon-btn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.field-icon-btn:hover {
+  color: var(--text-white);
+}
+
+/* ==========================================================================
+   Meta Row: Remember Me & Forgot Password
+   ========================================================================== */
+.form-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: -2px;
+  font-size: 0.82rem;
+}
+
+.remember-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.remember-label input[type="checkbox"] {
+  display: none;
+}
+
+.custom-checkbox {
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.custom-checkbox i {
+  font-size: 10px;
+  color: #ffffff;
+  display: none;
+}
+
+.remember-label input[type="checkbox"]:checked + .custom-checkbox {
+  background: #3b82f6;
+  border-color: #38bdf8;
+}
+
+.remember-label input[type="checkbox"]:checked + .custom-checkbox i {
+  display: block;
+}
+
+.checkbox-text {
+  color: #cbd5e1;
+}
+
+.forgot-link {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   Submit Button
+   ========================================================================== */
+.btn-submit {
+  width: 100%;
+  height: 48px;
+  margin-top: 6px;
+  background: var(--btn-gradient);
+  border: none;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5);
+  filter: brightness(1.08);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+.rocket-icon {
+  font-size: 0.95rem;
+  transform: rotate(-45deg);
+}
+
+/* ==========================================================================
+   Divider
+   ========================================================================== */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 6px 0;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.divider span {
+  padding: 0 14px;
+}
+
+/* ==========================================================================
+   Social Login
+   ========================================================================== */
+.social-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.social-btn {
+  flex: 1;
+  height: 44px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.social-btn:hover {
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   Footer / Sign up prompt
+   ========================================================================== */
+.signup-prompt {
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.signup-link {
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 4px;
+  transition: text-decoration 0.2s ease;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 960px) {
+  .login-wrapper {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 30px 20px;
+    min-height: auto;
+  }
+
+  .brand-section {
+    text-align: center;
+    align-items: center;
+    padding: 0;
+  }
+
+  .brand-top {
+    justify-content: center;
+  }
+
+  .satellite-illustration {
+    margin: 0 auto 20px;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    margin: 0 auto 20px;
+  }
+
+  .login-card {
+    max-width: 440px;
+    padding: 34px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .login-card {
+    padding: 28px 20px;
+    border-radius: 20px;
+  }
+}
